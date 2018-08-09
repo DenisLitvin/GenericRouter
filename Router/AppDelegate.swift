@@ -15,7 +15,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        window = UIWindow(frame: UIScreen.main.bounds)
+        let vc = UITabBarController()
+        vc.addChildViewController(UINavigationController(rootViewController: ToVC()))
+//        vc.addChildViewController(ToVC())
+        vc.addChildViewController(UINavigationController(rootViewController: ViewController()))
+        window?.rootViewController = vc
+        window?.makeKeyAndVisible()
+        Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/iOSInjection.bundle")!.load()
         return true
     }
 
