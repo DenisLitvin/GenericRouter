@@ -8,28 +8,9 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+
+class ViewControllerViewModel: Routable {
     var someColor = UIColor.red
-
-    
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        self.view.backgroundColor = .green
-        navigationItem.title = "FromVC"
-        tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 0)
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
-    }
-    
-    @objc func tap() {
-        Router.push(ToVC.self, from: self)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-}
-
-extension ViewController: Routable {
     
     var input: [Input] {
         return []
@@ -42,7 +23,51 @@ extension ViewController: Routable {
 }
 
 
-class ToVC: UIViewController, Routable {
+class ViewController: UIViewController, MVVMView {
+    
+    let viewModel = ViewControllerViewModel()
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        self.view.backgroundColor = .green
+        navigationItem.title = "FromVC"
+        tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 0)
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
+    }
+    
+    @objc func tap() {
+        MVVMRouter.push(ToVC.self, from: self)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+}
+
+
+class ToVCViewModel: Routable {
+    var viewColor: UIColor = .green {
+        willSet {
+            print(newValue.debugDescription)
+        }
+    }
+    
+    var input: [Input] {
+        return [
+            Route.backColor.input({ self.viewColor = $0 })
+        ]
+    }
+    
+    var output: [Output] {
+        return [
+            Route.backColor.output(UIColor.cyan)
+        ]
+    }
+}
+
+class ToVC: UIViewController, MVVMView {
+    let viewModel = ToVCViewModel()
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         navigationItem.title = "ToVC"
@@ -52,23 +77,11 @@ class ToVC: UIViewController, Routable {
     }
     
     @objc func tap() {
-        Router.open(ToVC.self, from: self)
+        MVVMRouter.push(ToVC.self, from: self)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    var input: [Input] {
-        return [
-            Route.backColor.input({ self.view.backgroundColor = $0 })
-        ]
-    }
-    
-    var output: [Output] {
-        return [
-            Route.backColor.output(UIColor.cyan)
-        ]
     }
 }
 
