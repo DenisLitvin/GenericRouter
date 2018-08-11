@@ -10,7 +10,12 @@ import UIKit
 
 public protocol MVVMView {
     associatedtype ViewModel
+    func didSetDependencies()
     var viewModel: ViewModel { get }
+}
+
+extension MVVMView {
+    func didSetDependencies() {}
 }
 
 public class MVVMRouter {
@@ -35,11 +40,14 @@ public class MVVMRouter {
                     let to = navCon.visibleViewController as? To {
                     guard match(input: to.viewModel.input, output: from.viewModel.output)
                         else { fatalError("Input of \(To.self) doesn't match Output of \(From.self)") }
+                    to.didSetDependencies()
                     return true
                 }
                 if let to = vc as? To {
                     guard match(input: to.viewModel.input, output: from.viewModel.output)
+                        
                         else { fatalError("Input of \(To.self) doesn't match Output of \(From.self)") }
+                    to.didSetDependencies()
                     return true
                 }
                 return false
@@ -61,6 +69,7 @@ public class MVVMRouter {
             let to = to.init()
             guard match(input: to.viewModel.input, output: from.viewModel.output)
                 else { fatalError("Input of \(To.self) doesn't match Output of \(From.self)") }
+            to.didSetDependencies()
             guard let navController = from.navigationController
                 else { fatalError("Not found navigationController on \(from)") }
             navController.pushViewController(to, animated: animated)
@@ -79,6 +88,7 @@ public class MVVMRouter {
             let to = to.init()
             guard match(input: to.viewModel.input, output: from.viewModel.output)
                 else { fatalError("Input of \(To.self) doesn't match Output of \(From.self)") }
+            to.didSetDependencies()
             from.present(to, animated: animated, completion: completion)
     }
     
