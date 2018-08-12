@@ -43,6 +43,11 @@ public enum Route<Item>: Int {
 public protocol Routable {
     var input: [Input] { get }
     var output: [Output] { get }
+    func didSetDependencies()
+}
+
+extension Routable {
+    func didSetDependencies() {}
 }
 
 public class Router {
