@@ -9,7 +9,7 @@
 import UIKit
 
 public protocol MVVMView {
-    associatedtype ViewModel
+    associatedtype ViewModel: Routable
     var viewModel: ViewModel { get }
 }
 
@@ -23,10 +23,8 @@ public class MVVMRouter {
     ///but searches for specific view controller even if it's embedded into navigation controller**
     public static func open
         <From: UIViewController & MVVMView, To: UIViewController & MVVMView>
-        (_ to: To.Type, from: From, animated: Bool = true)
-        where
-        From.ViewModel: Routable,
-        To.ViewModel: Routable {
+        (_ to: To.Type, from: From, animated: Bool = true) {
+        
             guard let tabBarController = from.tabBarController
                 else { fatalError("Not found tabBarController on \(from) navigation stack") }
             
@@ -57,10 +55,7 @@ public class MVVMRouter {
     ///**equivalent to UINavigationController pushViewController(_:)**
     public static func push
         <From: UIViewController & MVVMView, To: UIViewController & MVVMView>
-        (_ to: To.Type, from: From, animated: Bool = true)
-        where
-        From.ViewModel: Routable,
-        To.ViewModel: Routable {
+        (_ to: To.Type, from: From, animated: Bool = true) {
             let to = to.init()
             guard match(input: to.viewModel.input, output: from.viewModel.output)
                 else { fatalError("Input of \(To.self) doesn't match Output of \(From.self)") }
@@ -76,10 +71,7 @@ public class MVVMRouter {
     ///**equivalent to UIViewController present(_:)**
     public static func present
         <From: UIViewController & MVVMView, To: UIViewController & MVVMView>
-        (_ to: To.Type, from: From, animated: Bool = true, completion: RouteCompletion? = nil)
-        where
-        From.ViewModel: Routable,
-        To.ViewModel: Routable {
+        (_ to: To.Type, from: From, animated: Bool = true, completion: RouteCompletion? = nil) {
             let to = to.init()
             guard match(input: to.viewModel.input, output: from.viewModel.output)
                 else { fatalError("Input of \(To.self) doesn't match Output of \(From.self)") }
