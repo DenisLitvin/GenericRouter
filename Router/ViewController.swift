@@ -23,8 +23,8 @@ class ViewControllerViewModel: Routable {
 }
 
 
-class ViewController: UIViewController, MVVMView {
-    
+class ViewController: UIViewController {
+ 
     let viewModel = ViewControllerViewModel()
     
     init() {
@@ -42,8 +42,13 @@ class ViewController: UIViewController, MVVMView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+    
 }
 
+extension ViewController: MVVMView {
+    func didSetDependencies() {
+    }
+}
 
 class ToVCViewModel: Routable {
     var viewColor: UIColor = .green {
@@ -66,6 +71,9 @@ class ToVCViewModel: Routable {
 }
 
 class ToVC: UIViewController, MVVMView {
+    func didSetDependencies() {
+    }
+    
     let viewModel = ToVCViewModel()
     
     init() {
