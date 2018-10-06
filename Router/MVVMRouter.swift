@@ -11,6 +11,7 @@ import UIKit
 public protocol MVVMView {
     associatedtype ViewModel: Routable
     var viewModel: ViewModel { get }
+    func didSetDependencies()
 }
 
 public class MVVMRouter {
@@ -24,29 +25,30 @@ public class MVVMRouter {
     public static func open
         <From: UIViewController & MVVMView, To: UIViewController & MVVMView>
         (_ to: To.Type, from: From, animated: Bool = true) {
+        guard let tabBarController = from.tabBarController
+            else { fatalError("Not found tabBarController on \(from) navigation stack") }
         
-            guard let tabBarController = from.tabBarController
-                else { fatalError("Not found tabBarController on \(from) navigation stack") }
-            
-            guard let vc = tabBarController.viewControllers?.first(where: { (vc: UIViewController) in
-                if let navCon = vc as? UINavigationController,
-                    let to = navCon.visibleViewController as? To {
-                    guard match(input: to.viewModel.input, output: from.viewModel.output)
-                        else { fatalError("Input of \(To.self) doesn't match Output of \(From.self)") }
-                    to.viewModel.didSetDependencies()
-                    return true
-                }
-                if let to = vc as? To {
-                    guard match(input: to.viewModel.input, output: from.viewModel.output)
-                        
-                        else { fatalError("Input of \(To.self) doesn't match Output of \(From.self)") }
-                    to.viewModel.didSetDependencies()
-                    return true
-                }
-                return false
-            }) else { fatalError("Not found ViewController of type \(To.self) as a child of \(tabBarController)") }
-            
-            tabBarController.selectedViewController = vc
+        guard let vc = tabBarController.viewControllers?.first(where: { (vc: UIViewController) in
+            if let navCon = vc as? UINavigationController,
+                let to = navCon.visibleViewController as? To {
+                guard match(input: to.viewModel.input, output: from.viewModel.output)
+                    else { fatalError("Input of \(To.self) doesn't match Output of \(From.self)") }
+                to.viewModel.didSetDependencies()
+                to.didSetDependencies()
+                return true
+            }
+            if let to = vc as? To {
+                guard match(input: to.viewModel.input, output: from.viewModel.output)
+                    
+                    else { fatalError("Input of \(To.self) doesn't match Output of \(From.self)") }
+                to.viewModel.didSetDependencies()
+                to.didSetDependencies()
+                return true
+            }
+            return false
+        }) else { fatalError("Not found ViewController of type \(To.self) as a child of \(tabBarController)") }
+        
+        tabBarController.selectedViewController = vc
     }
     
     ///Pushes a view controller onto UINavigationController navigation stack
@@ -56,13 +58,14 @@ public class MVVMRouter {
     public static func push
         <From: UIViewController & MVVMView, To: UIViewController & MVVMView>
         (_ to: To.Type, from: From, animated: Bool = true) {
-            let to = to.init()
-            guard match(input: to.viewModel.input, output: from.viewModel.output)
-                else { fatalError("Input of \(To.self) doesn't match Output of \(From.self)") }
-            to.viewModel.didSetDependencies()
-            guard let navController = from.navigationController
-                else { fatalError("Not found navigationController on \(from)") }
-            navController.pushViewController(to, animated: animated)
+        let to = to.init()
+        guard match(input: to.viewModel.input, output: from.viewModel.output)
+            else { fatalError("Input of \(To.self) doesn't match Output of \(From.self)") }
+        to.viewModel.didSetDependencies()
+        to.didSetDependencies()
+        guard let navController = from.navigationController
+            else { fatalError("Not found navigationController on \(from)") }
+        navController.pushViewController(to, animated: animated)
     }
     
     ///Presents a view controller modally
@@ -72,11 +75,12 @@ public class MVVMRouter {
     public static func present
         <From: UIViewController & MVVMView, To: UIViewController & MVVMView>
         (_ to: To.Type, from: From, animated: Bool = true, completion: RouteCompletion? = nil) {
-            let to = to.init()
-            guard match(input: to.viewModel.input, output: from.viewModel.output)
-                else { fatalError("Input of \(To.self) doesn't match Output of \(From.self)") }
-            to.viewModel.didSetDependencies()
-            from.present(to, animated: animated, completion: completion)
+        let to = to.init()
+        guard match(input: to.viewModel.input, output: from.viewModel.output)
+            else { fatalError("Input of \(To.self) doesn't match Output of \(From.self)") }
+        to.viewModel.didSetDependencies()
+        to.didSetDependencies()
+        from.present(to, animated: animated, completion: completion)
     }
     
     private static func match(input: [Input], output: [Output]) -> Bool {
@@ -92,4 +96,3 @@ public class MVVMRouter {
         return true
     }
 }
-
