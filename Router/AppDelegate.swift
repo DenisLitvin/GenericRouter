@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         vc.addChildViewController(UINavigationController(rootViewController: ViewController()))
         window?.rootViewController = vc
         window?.makeKeyAndVisible()
-        Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/iOSInjection.bundle")!.load()
+//        Bundle(path: "/Applications/Injection.app/Contents/Resources/iOSInjection.bundle")!.load()
         return true
     }
 

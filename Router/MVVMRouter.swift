@@ -84,7 +84,7 @@ public class MVVMRouter {
     }
     
     private static func match(input: [Input], output: [Output]) -> Bool {
-        var outputDict = [Int: Output]()
+        var outputDict = [String: Output]()
         for item in output {
             outputDict[item.type] = item
         }

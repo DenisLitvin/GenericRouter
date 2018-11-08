@@ -17,7 +17,7 @@ class ViewControllerViewModel: Routable {
     }
     var output: [Output] {
         return [
-            Route.backColor.output(someColor)
+            Route<UIColor>().output(.red)
         ]
     }
 }
@@ -51,21 +51,25 @@ extension ViewController: MVVMView {
 }
 
 class ToVCViewModel: Routable {
+    
+    weak var vc: ToVC!
+    
     var viewColor: UIColor = .green {
         willSet {
             print(newValue.debugDescription)
         }
     }
     
+    
     var input: [Input] {
         return [
-            Route.backColor.input({ self.viewColor = $0 })
+            Route<UIColor>().input { self.viewColor = $0 }
         ]
     }
     
     var output: [Output] {
         return [
-            Route.backColor.output(UIColor.cyan)
+            Route<UIColor>().output(.cyan)
         ]
     }
 }

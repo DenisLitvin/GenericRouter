@@ -10,33 +10,30 @@ import UIKit
 
 public struct Input {
     let closure: (AnyObject) -> ()
-    let type: Int
+    let type: String
 }
 
 public struct Output {
     let value: AnyObject
-    let type: Int
+    let type: String
 }
 
-public enum Route<Item>: Int {
-    
-    //add new cases here
-    case database
-    case backColor
+public struct Route<Item> {
     
     public typealias ItemSetter = (Item) -> Void
     
-    public func input(_ closure: @escaping ItemSetter) -> Input {
+    func input(_ closure: @escaping ItemSetter) -> Input {
         return Input(
             closure: { (value) in
                 guard let item = value as? Item
                     else { fatalError("Could not cast \(value) as \(Item.self)") }
                 closure(item) },
-            type: self.rawValue)
+            type: String(describing: Item.self)
+        )
     }
     
-    public func output(_ value: Item) -> Output {
-        return Output(value: value as AnyObject, type: self.rawValue)
+    func output(_ value: Item) -> Output {
+        return Output(value: value as AnyObject, type: String(describing: Item.self))
     }
 }
 
@@ -50,7 +47,7 @@ extension Routable {
     func didSetDependencies() {}
 }
 
-public class Router {
+public struct Router {
     public typealias RouteCompletion = () -> Void
     
     ///Selects a view controller in UITabBarController navigation stack
@@ -120,7 +117,7 @@ public class Router {
     }
     
     private static func match(input: [Input], output: [Output]) -> Bool {
-        var outputDict = [Int: Output]()
+        var outputDict = [String: Output]()
         for item in output {
             outputDict[item.type] = item
         }
