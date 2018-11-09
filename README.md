@@ -5,18 +5,27 @@
 
 Each view controller needs to conform to `Routable`. 
 It must provide input and output arrays.
-Router will check if VC from which you present next VC has sufficient output to provide for next VC's input. 
+Router will check if VC from which you present next VC has output sufficient to provide for next VC's input. For each input you make, the view controller has to have output to match.
 
 ```swift
- var input: [Input] {
+class FromVC: Routable {
+
+    var routes: [Route] {
         return [
-            Route.backColor.input({ self.view.backgroundColor = $0 })
+            Input<String> { self.string = $0 },
+            Output<String>("output of FromVC")
         ]
     }
     
-    var output: [Output] {
+}
+class ToVC: Routable {
+
+    var routes: [Route] {
         return [
-            Route.backColor.output(UIColor.cyan)
+            Input<String> { self.string = $0 },
+            Output<String>("output of ToVC")
         ]
     }
+    
+}
 ```    
