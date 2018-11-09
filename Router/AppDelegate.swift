@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let vc = UITabBarController()
         vc.addChildViewController(UINavigationController(rootViewController: ToVC()))
 //        vc.addChildViewController(ToVC())
-        vc.addChildViewController(UINavigationController(rootViewController: ViewController()))
+        vc.addChildViewController(UINavigationController(rootViewController: FromVC()))
         window?.rootViewController = vc
         window?.makeKeyAndVisible()
 //        Bundle(path: "/Applications/Injection.app/Contents/Resources/iOSInjection.bundle")!.load()

@@ -83,8 +83,8 @@ public class MVVMRouter {
         from.present(to, animated: animated, completion: completion)
     }
     
-    private static func match(input: [Input], output: [Output]) -> Bool {
-        var outputDict = [String: Output]()
+    private static func match(input: [AnyInput], output: [AnyOutput]) -> Bool {
+        var outputDict = [String: AnyOutput]()
         for item in output {
             outputDict[item.type] = item
         }

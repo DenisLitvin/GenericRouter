@@ -8,43 +8,80 @@
 
 import UIKit
 
-public struct Input {
-    let closure: (AnyObject) -> ()
-    let type: String
+public protocol Route {}
+
+public protocol AnyInput: Route {
+    var closure: (Any) -> () {get}
+    var type: String {get}
 }
 
-public struct Output {
-    let value: AnyObject
-    let type: String
+public protocol AnyOutput: Route {
+    var value: Any {get}
+    var type: String {get}
 }
 
-public struct Route<Item> {
-    
+public struct Input<Item>: AnyInput {
     public typealias ItemSetter = (Item) -> Void
+
+    public let closure: (Any) -> ()
+    public let type: String
     
-    func input(_ closure: @escaping ItemSetter) -> Input {
-        return Input(
-            closure: { (value) in
-                guard let item = value as? Item
-                    else { fatalError("Could not cast \(value) as \(Item.self)") }
-                closure(item) },
-            type: String(describing: Item.self)
-        )
-    }
-    
-    func output(_ value: Item) -> Output {
-        return Output(value: value as AnyObject, type: String(describing: Item.self))
+    init(_ closure: @escaping ItemSetter) {
+        self.closure = { (value) in
+            guard let item = value as? Item
+                else { fatalError("Could not cast \(value) as \(Item.self)") }
+            closure(item)
+        }
+        self.type = String(describing: Item.self)
     }
 }
+
+public struct Output<Item>: AnyOutput {
+    public let value: Any
+    public let type: String
+    
+    init(_ value: Item) {
+        self.value = value
+        self.type = String(describing: Item.self)
+    }
+
+}
+//public struct Route<Item> {
+//
+//    public typealias ItemSetter = (Item) -> Void
+//
+//    func input(_ closure: @escaping ItemSetter) -> Input {
+//        return Input(
+//            closure: { (value) in
+//                guard let item = value as? Item
+//                    else { fatalError("Could not cast \(value) as \(Item.self)") }
+//                closure(item) },
+//            type: String(describing: Item.self)
+//        )
+//    }
+//
+//    func output(_ value: Item) -> Output {
+//        return Output(value: value as Any, type: String(describing: Item.self))
+//    }
+//}
 
 public protocol Routable {
-    var input: [Input] { get }
-    var output: [Output] { get }
+//    var input: [Input] { get }
+//    var output: [Output] { get }
+    var routes: [Route] { get }
     func didSetDependencies()
 }
 
 extension Routable {
     func didSetDependencies() {}
+    
+    var input: [AnyInput] {
+        return routes.filter { $0 is AnyInput } as! [AnyInput]
+    }
+    
+    var output: [AnyOutput] {
+        return routes.filter { $0 is AnyOutput } as! [AnyOutput]
+    }
 }
 
 public struct Router {
@@ -116,8 +153,8 @@ public struct Router {
             from.present(to, animated: animated, completion: completion)
     }
     
-    private static func match(input: [Input], output: [Output]) -> Bool {
-        var outputDict = [String: Output]()
+    private static func match(input: [AnyInput], output: [AnyOutput]) -> Bool {
+        var outputDict = [String: AnyOutput]()
         for item in output {
             outputDict[item.type] = item
         }

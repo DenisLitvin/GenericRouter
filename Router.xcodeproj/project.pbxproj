@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		3E01EB7C211D9FF300CF8A43 /* MVVMRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E01EB7B211D9FF300CF8A43 /* MVVMRouter.swift */; };
 		3E38E592211AE68E00D0E022 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E38E591211AE68E00D0E022 /* AppDelegate.swift */; };
-		3E38E594211AE68E00D0E022 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E38E593211AE68E00D0E022 /* ViewController.swift */; };
+		3E38E594211AE68E00D0E022 /* FromVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E38E593211AE68E00D0E022 /* FromVC.swift */; };
 		3E38E597211AE68E00D0E022 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E38E595211AE68E00D0E022 /* Main.storyboard */; };
 		3E38E599211AE69000D0E022 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3E38E598211AE69000D0E022 /* Assets.xcassets */; };
 		3E38E59C211AE69000D0E022 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E38E59A211AE69000D0E022 /* LaunchScreen.storyboard */; };
@@ -20,7 +20,7 @@
 		3E01EB7B211D9FF300CF8A43 /* MVVMRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MVVMRouter.swift; sourceTree = "<group>"; };
 		3E38E58E211AE68E00D0E022 /* Router.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Router.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E38E591211AE68E00D0E022 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3E38E593211AE68E00D0E022 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		3E38E593211AE68E00D0E022 /* FromVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FromVC.swift; sourceTree = "<group>"; };
 		3E38E596211AE68E00D0E022 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3E38E598211AE69000D0E022 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3E38E59B211AE69000D0E022 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -59,7 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				3E38E591211AE68E00D0E022 /* AppDelegate.swift */,
-				3E38E593211AE68E00D0E022 /* ViewController.swift */,
+				3E38E593211AE68E00D0E022 /* FromVC.swift */,
 				3E38E5A3211AE6A100D0E022 /* Router.swift */,
 				3E01EB7B211D9FF300CF8A43 /* MVVMRouter.swift */,
 				3E38E595211AE68E00D0E022 /* Main.storyboard */,
@@ -141,7 +141,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E38E594211AE68E00D0E022 /* ViewController.swift in Sources */,
+				3E38E594211AE68E00D0E022 /* FromVC.swift in Sources */,
 				3E38E5A4211AE6A100D0E022 /* Router.swift in Sources */,
 				3E01EB7C211D9FF300CF8A43 /* MVVMRouter.swift in Sources */,
 				3E38E592211AE68E00D0E022 /* AppDelegate.swift in Sources */,

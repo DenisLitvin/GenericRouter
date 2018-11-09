@@ -9,23 +9,26 @@
 import UIKit
 
 
-class ViewControllerViewModel: Routable {
-    var someColor = UIColor.red
+class FromVCViewModel: Routable {
     
-    var input: [Input] {
-        return []
+    var string = "FromVC String" {
+        willSet {
+            print(newValue.debugDescription)
+        }
     }
-    var output: [Output] {
+    
+    var routes: [Route] {
         return [
-            Route<UIColor>().output(.red)
+            Input<String> { self.string = $0 },
+            Output<String>("output of FromVC")
         ]
     }
 }
 
 
-class ViewController: UIViewController {
+class FromVC: UIViewController {
  
-    let viewModel = ViewControllerViewModel()
+    let viewModel = FromVCViewModel()
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -45,32 +48,22 @@ class ViewController: UIViewController {
     
 }
 
-extension ViewController: MVVMView {
+extension FromVC: MVVMView {
     func didSetDependencies() {
     }
 }
 
 class ToVCViewModel: Routable {
-    
-    weak var vc: ToVC!
-    
-    var viewColor: UIColor = .green {
+    var routes: [Route] {
+        return [
+            Input<String> { self.string = $0 },
+            Output<String>("output of ToVC")
+        ]
+    }
+    var string: String = "ToVC string" {
         willSet {
             print(newValue.debugDescription)
         }
-    }
-    
-    
-    var input: [Input] {
-        return [
-            Route<UIColor>().input { self.viewColor = $0 }
-        ]
-    }
-    
-    var output: [Output] {
-        return [
-            Route<UIColor>().output(.cyan)
-        ]
     }
 }
 
@@ -98,12 +91,12 @@ class ToVC: UIViewController, MVVMView {
 }
 
 
-extension ViewController {
+extension FromVC {
     @objc func injected() {
         print("INJECTED")
         let vc = UITabBarController()
         vc.addChildViewController(UINavigationController(rootViewController: ToVC()))
-        vc.addChildViewController(UINavigationController(rootViewController: ViewController()))
+        vc.addChildViewController(UINavigationController(rootViewController: FromVC()))
         UIApplication.shared.keyWindow?.rootViewController = vc
 //        vc.viewDidLoad()
     }
