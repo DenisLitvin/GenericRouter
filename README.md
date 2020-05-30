@@ -21,7 +21,7 @@ class ViewControllerB: Routable {
 
     var routes: [Route] {
         return [
-            Input<String> { self.string = $0 }
+            Input<String> { self.nsvigationItem.title = $0 }
         ]
     }
     
