@@ -8,24 +8,26 @@ It must provide input and output arrays.
 Router will check if VC from which you present next VC has output sufficient to provide for next VC's input. For each input you make, the view controller has to have output to match.
 
 ```swift
-class FromVC: Routable {
+class ViewControllerA: Routable {
 
     var routes: [Route] {
         return [
-            Input<String> { self.string = $0 },
-            Output<String>("output of FromVC")
+            Output<String>("Pushed from ViewControllerA")
         ]
     }
     
 }
-class ToVC: Routable {
+class ViewControllerB: Routable {
 
     var routes: [Route] {
         return [
-            Input<String> { self.string = $0 },
-            Output<String>("output of ToVC")
+            Input<String> { self.string = $0 }
         ]
     }
     
 }
+
+// ViewControllerB will have nav bar title 'Pushed from ViewControllerA'
+Router.push(ViewControllerB(), from:ViewControllerA(), animated:true)
+
 ```    
